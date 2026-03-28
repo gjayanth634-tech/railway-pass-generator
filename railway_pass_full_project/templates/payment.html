@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="payment-container">
+    <form method="POST">
+        <h2>Choose Payment Method</h2>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <!-- Payment Options -->
+        <div class="payment-options-container">
+            <!-- Card Option -->
+            <div class="payment-option">
+                <input type="radio" id="Card" name="payment" value="Card" onclick="showPaymentDetails('card-details')">
+                <label for="Card">Credit / Debit Card</label>
+            </div>
+            <div id="card-details" class="payment-details" style="display:none;">
+                <input type="text" placeholder="Card Number (e.g., 1234 5678 9012 3456)" pattern="[\d ]{16,19}" title="Enter a valid 16-digit card number" autocomplete="cc-number">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" placeholder="Expiry (MM/YY)" pattern="\d{2}/\d{2}" title="Enter expiry in MM/YY format" autocomplete="cc-exp">
+                    <input type="text" placeholder="CVV" pattern="\d{3,4}" title="Enter the 3 or 4-digit CVV" autocomplete="cc-csc">
+                </div>
+            </div>
+
+            <!-- UPI Option -->
+            <div class="payment-option">
+                <input type="radio" id="UPI" name="payment" value="UPI" onclick="showPaymentDetails('upi-details')">
+                <label for="UPI">UPI / QR Code</label>
+            </div>
+            <div id="upi-details" class="payment-details" style="display:none;">
+                <input type="text" placeholder="Enter UPI ID (e.g., yourname@bank)">
+                <p style="text-align: center; font-size: 14px; color: #777; margin-top: 10px;">Or proceed to scan QR on the next page.</p>
+            </div>
+
+            <!-- Wallet Option -->
+            <div class="payment-option">
+                <input type="radio" id="Wallet" name="payment" value="Wallet" onclick="showPaymentDetails('wallet-details')">
+                <label for="Wallet">Wallet</label>
+            </div>
+            <div id="wallet-details" class="payment-details" style="display:none;">
+                <select>
+                    <option disabled selected>Select Wallet</option>
+                    <option>Paytm</option>
+                    <option>PhonePe</option>
+                    <option>Amazon Pay</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="pay-btn">Pay ₹{{ amount }}</button>
+    </form>
+
+    <div class="bottom-text" style="margin-top: 20px;">
+        <a href="{{ url_for('home') }}">Cancel Payment</a>
+    </div>
+</div>
+
+<script>
+    function showPaymentDetails(elementId) {
+        // Hide all details sections
+        document.querySelectorAll('.payment-details').forEach(function(div) {
+            div.style.display = 'none';
+        });
+        // Show the selected one
+        const targetElement = document.getElementById(elementId);
+        if (targetElement) {
+            targetElement.style.display = 'block';
+        }
+    }
+</script>
+</body>
+</html>

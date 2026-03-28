@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Pass - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-left">
+            <div class="brand">
+                <i class="fas fa-train"></i>
+                <h1>Railway Pass</h1>
+            </div>
+            <p class="tagline">Generate your journey pass instantly</p>
+            <div class="features">
+                <div class="feature"><i class="fas fa-bolt"></i> Quick Pass Generation</div>
+                <div class="feature"><i class="fas fa-shield-alt"></i> Secure Payments</div>
+                <div class="feature"><i class="fas fa-print"></i> Print & Travel</div>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-box">
+                <h2>Welcome Back</h2>
+                <p>Login to your account</p>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="{{ url_for('login') }}">
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <p class="register-link">Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+                <p class="admin-link"><a href="{{ url_for('admin_login') }}">Admin Login</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

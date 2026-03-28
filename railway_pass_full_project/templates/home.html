@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Railway Pass Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='image/railway.jpg') }}">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <h2>Select Railway Pass</h2>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="{{ url_for('my_passes') }}" class="logout">My Passes</a>
+            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <!-- Form -->
+    <form method="POST">
+
+        {% set name = request.form.get('name') or (user.get('name') if user else None) %}
+        <input type="text" name="name" placeholder="Passenger Name" class="form-input" required {% if name %}value="{{ name }}"{% endif %}>
+
+        {% set age = request.form.get('age') %}
+        <input type="number" name="age" placeholder="Age" class="form-input" required {% if age %}value="{{ age }}"{% endif %}>
+
+        {% set aadhaar = request.form.get('aadhaar') or (user.get('aadhaar') if user else None) %}
+        <input type="text" name="aadhaar" placeholder="Aadhaar Number" class="form-input" required {% if aadhaar %}value="{{ aadhaar }}"{% endif %}>
+
+        {% set mobile = request.form.get('mobile') or (user.get('mobile') if user else None) %}
+        <input type="text" name="mobile" placeholder="Mobile Number" class="form-input" required {% if mobile %}value="{{ mobile }}"{% endif %}>
+
+        {% set from_station = request.form.get('from') %}
+        <input type="text" name="from" placeholder="Departure Station" class="form-input" required list="stations" {% if from_station %}value="{{ from_station }}"{% endif %}>
+
+        {% set to_station = request.form.get('to') %}
+        <input type="text" name="to" placeholder="Destination Station" class="form-input" required list="stations" {% if to_station %}value="{{ to_station }}"{% endif %}>
+
+        <!-- Station List -->
+        <datalist id="stations">
+            <option value="Bengaluru City Junction (SBC)">
+            <option value="KSR Bengaluru (Yesvantpur)">
+            <option value="Bengaluru Cantonment">
+            <option value="Mysuru Junction">
+            <option value="Mangaluru Central">
+            <option value="Mangaluru Junction">
+            <option value="Hubballi Junction">
+            <option value="Dharwad">
+            <option value="Belagavi">
+            <option value="Ballari Junction">
+            <option value="Kalaburagi Junction">
+            <option value="Bidar">
+            <option value="Raichur">
+            <option value="Yadgir">
+            <option value="Shivamogga Town">
+            <option value="Chikkamagaluru">
+            <option value="Hassan Junction">
+            <option value="Tumakuru">
+            <option value="Davangere">
+            <option value="Harihar">
+            <option value="Chitradurga">
+            <option value="Kolar">
+            <option value="Bangarapet Junction">
+            <option value="Mandya">
+            <option value="Ramanagara">
+            <option value="Udupi">
+            <option value="Karwar">
+            <option value="Sirsi">
+            <option value="Gadag Junction">
+            <option value="Haveri">
+            <option value="Bagalkot">
+            <option value="Vijayapura (Bijapur)">
+            <option value="Chamarajanagar">
+        </datalist>
+
+        <select name="pass_type" required>
+            <option value="" disabled selected>Select Pass Type</option>
+            <option value="Daily" {% if request.form.get('pass_type') == 'Daily' %}selected{% endif %}>Daily Pass</option>
+            <option value="Weekly" {% if request.form.get('pass_type') == 'Weekly' %}selected{% endif %}>Weekly Pass</option>
+            <option value="Monthly" {% if request.form.get('pass_type') == 'Monthly' %}selected{% endif %}>Monthly Pass</option>
+        </select>
+
+        <select name="train_type" required>
+            <option value="" disabled selected>Select Train Type</option>
+            <option value="Ordinary" {% if request.form.get('train_type') == 'Ordinary' %}selected{% endif %}>Ordinary</option>
+            <option value="Express" {% if request.form.get('train_type') == 'Express' %}selected{% endif %}>Express</option>
+            <option value="Superfast" {% if request.form.get('train_type') == 'Superfast' %}selected{% endif %}>Superfast</option>
+        </select>
+
+        <button type="submit">Generate Pass</button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

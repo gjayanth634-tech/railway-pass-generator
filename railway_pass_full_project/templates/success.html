@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pass Generated</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="payment-page">
+
+<div class="payment-container">
+
+    <h2 style="font-size: 24px;">Pass Generated Successfully!</h2>
+
+    <div class="pass-details" style="text-align: left; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 25px; line-height: 1.8;">
+        <p><strong>Pass Number:</strong> {{ pass_number }}</p>
+        <p><strong>Name:</strong> {{ name }}</p>
+        <p><strong>Age:</strong> {{ age }}</p>
+        <p><strong>Pass Type:</strong> {{ pass_type }}</p>
+        <p><strong>From:</strong> {{ source }}</p>
+        <p><strong>To:</strong> {{ destination }}</p>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        <a href="{{ url_for('my_passes') }}">
+            <button class="pay-btn" style="background: transparent; border: 1px solid orange; color: orange;">View My Passes</button>
+        </a>
+        <a href="{{ url_for('home') }}">
+            <button class="pay-btn">Generate Another Pass</button>
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

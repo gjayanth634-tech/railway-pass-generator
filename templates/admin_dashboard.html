@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Railway Pass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand {
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 10px;
+        }
+        
+        .sidebar-brand i {
+            color: #e74c3c;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #bdc3c7;
+            text-decoration: none;
+            padding: 14px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+        
+        .sidebar-menu a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            background: #f5f6fa;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+        
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card .icon.users { background: rgba(52, 152, 219, 0.15); color: #3498db; }
+        .stat-card .icon.passes { background: rgba(39, 174, 96, 0.15); color: #27ae60; }
+        .stat-card .icon.revenue { background: rgba(243, 156, 18, 0.15); color: #f39c12; }
+        .stat-card .icon.trains { background: rgba(155, 89, 182, 0.15); color: #9b59b6; }
+        
+        .stat-card h3 {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .dashboard-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-header h2 i {
+            color: #e74c3c;
+        }
+        
+        .card-header a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+        
+        .card-header a:hover {
+            color: #e74c3c;
+        }
+        
+        .card-body {
+            padding: 0;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        
+        .table-list {
+            list-style: none;
+        }
+        
+        .table-list li {
+            padding: 15px 25px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+        
+        .table-list li:hover {
+            background: #f8f9fa;
+        }
+        
+        .table-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .item-info .name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        
+        .item-info .detail {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+        
+        .item-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-daily { background: rgba(243, 156, 18, 0.15); color: #f39c12; }
+        .badge-monthly { background: rgba(52, 152, 219, 0.15); color: #3498db; }
+        .badge-yearly { background: rgba(39, 174, 96, 0.15); color: #27ae60; }
+        
+        .badge-rupee { background: rgba(39, 174, 96, 0.15); color: #27ae60; }
+        
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-train"></i>
+                Railway Pass
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}" class="active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a></li>
+                <li><a href="{{ url_for('admin_all_passes') }}">
+                    <i class="fas fa-ticket-alt"></i> All Passes
+                </a></li>
+                <li><a href="{{ url_for('admin_all_users') }}">
+                    <i class="fas fa-users"></i> All Users
+                </a></li>
+                <li><a href="{{ url_for('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <div class="admin-info">
+                    <span class="admin-badge"><i class="fas fa-user-shield"></i> Admin</span>
+                    <a href="{{ url_for('admin_logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" style="margin-bottom: 25px;">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="icon users"><i class="fas fa-users"></i></div>
+                    <h3>Total Users</h3>
+                    <div class="value">{{ total_users }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon passes"><i class="fas fa-ticket-alt"></i></div>
+                    <h3>Total Passes</h3>
+                    <div class="value">{{ total_passes }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon revenue"><i class="fas fa-rupee-sign"></i></div>
+                    <h3>Total Revenue</h3>
+                    <div class="value">₹{{ total_revenue }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon trains"><i class="fas fa-train"></i></div>
+                    <h3>Active Trains</h3>
+                    <div class="value">{{ TRAINS|length }}</div>
+                </div>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> Recent Passes</h2>
+                        <a href="{{ url_for('admin_all_passes') }}">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <ul class="table-list">
+                            {% for pass_item in recent_passes %}
+                            <li>
+                                <div class="item-info">
+                                    <span class="name">{{ pass_item.pass_id }}</span>
+                                    <span class="detail">{{ pass_item.from_city }} → {{ pass_item.to_city }}</span>
+                                </div>
+                                <span class="item-badge badge-{{ pass_item.pass_type }}">{{ pass_item.pass_type|upper }}</span>
+                            </li>
+                            {% else %}
+                            <li style="text-align: center; color: #7f8c8d; padding: 30px;">No passes yet</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-user-plus"></i> Recent Users</h2>
+                        <a href="{{ url_for('admin_all_users') }}">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <ul class="table-list">
+                            {% for user in recent_users %}
+                            <li>
+                                <div class="item-info">
+                                    <span class="name">{{ user.full_name }}</span>
+                                    <span class="detail">{{ user.email }}</span>
+                                </div>
+                                <span class="item-badge badge-rupee">Active</span>
+                            </li>
+                            {% else %}
+                            <li style="text-align: center; color: #7f8c8d; padding: 30px;">No users yet</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

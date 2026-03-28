@@ -1,0 +1,333 @@
+/* =========================
+   RESET
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================
+   BODY BACKGROUND
+========================= */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;   /* Horizontal center */
+    align-items: center; 
+    background: url("../image/railway-station.jpg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================
+   MAIN CONTAINER CARD
+========================= */
+.container {
+    width: 420px;
+    padding: 40px;
+    border-radius: 20px;
+
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(15px);
+
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+
+    color: white;
+    animation: fadeIn 0.6s ease;
+}
+
+
+/* =========================
+   TOP BAR (TITLE + LOGOUT)
+========================= */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.top-bar h2 {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.logout {
+    color: #ff9800;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.logout:hover {
+    text-decoration: underline;
+}
+
+.link-text {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.link-text a {
+    color: orange;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* =========================
+   FORM INPUTS
+========================= */
+input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+}
+
+input:focus {
+    box-shadow: 0 0 10px orange;
+    transform: scale(1.02);
+    transition: 0.2s;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(45deg, #ff9800, #ff7b00);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255,140,0,0.6);
+}
+
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+.error {
+    background: rgba(255, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* =========================
+   RESPONSIVE (Mobile)
+========================= */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+        padding: 25px;
+    }
+}
+/* ===== PAYMENT PAGE FIX ===== */
+
+/* Center only payment page */
+.payment-page {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Payment card */
+.payment-container {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px;
+    width: 400px;
+    border-radius: 12px;
+    color: white;
+}
+
+/* Title */
+.payment-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Payment options */
+.payment-option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* THIS FIXES YOUR ERROR */
+    gap: 12px;
+    margin: 15px 0;
+}
+
+/* Radio button size */
+.payment-option input[type="radio"] {
+    transform: scale(1.2);
+    cursor: pointer;
+    justify-content: space-between;
+
+}
+
+/* Button */
+.pay-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background-color: orange;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.pay-btn:hover {
+    background-color: darkorange;
+
+}
+
+/* ===== PAYMENT PAGE MODERN DESIGN ===== */
+
+.payment-page {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Glass effect card */
+.payment-container {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    width: 420px;
+    border-radius: 18px;
+    color: white;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Title */
+.payment-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+}
+
+/* Payment options */
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.payment-option input[type="radio"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid orange;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Inner dot when selected */
+.payment-option input[type="radio"]:checked {
+    background-color: orange;
+}
+
+
+/* Button */
+.pay-btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 25px;
+    background: linear-gradient(45deg, orange, darkorange);
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.pay-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 140, 0, 0.6);
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: bold;
+}
+.bottom-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.bottom-text a {
+    color: #ff9800;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+    transition: 0.3s;
+}
+
+.bottom-text a:hover {
+    color: #ffc107;
+    text-decoration: underline;
+}
+
+select {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+    background: rgba(255,255,255,0.9);
+    cursor: pointer;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Payment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- This tag automatically redirects to the finalize page after 5 seconds -->
+    <meta http-equiv="refresh" content="5; url={{ url_for('finalize_payment', token=token) }}">
+    <style>
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid orange;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .qr-code {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px auto;
+            width: fit-content;
+        }
+    </style>
+</head>
+<body class="payment-page">
+
+<div class="payment-container" style="text-align: center;">
+
+    {% if method == 'UPI' %}
+        <h2>Scan to Pay</h2>
+        <div class="qr-code">
+            <!-- This uses a public API to generate a QR code for a sample UPI string -->
+            <img src="{{ qr_code_url }}" alt="UPI QR Code">
+        </div>
+        <p>Waiting for payment confirmation...</p>
+        <p style="font-size: 12px; color: #ccc;">You will be redirected automatically.</p>
+
+    {% else %}
+        <h2>Processing Payment</h2>
+        <div class="loader"></div>
+        <p>Payment successful!</p>
+        <p>Transaction Reference: <strong>{{ token }}</strong></p>
+        <p style="font-size: 12px; color: #ccc;">Please wait while we generate your pass.</p>
+    
+    {% endif %}
+
+    <div class="link-text" style="margin-top: 30px;">
+        <a href="{{ url_for('finalize_payment', token=token) }}" style="font-size: 14px;">Click here if you are not redirected</a>
+    </div>
+
+</div>
+
+</body>
+</html>

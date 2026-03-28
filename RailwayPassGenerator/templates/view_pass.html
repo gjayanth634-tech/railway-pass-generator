@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Passes - Railway Pass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            .passes-container, .passes-container * { visibility: visible; }
+            .passes-container { position: absolute; left: 0; top: 0; width: 100%; }
+            .print-btn, .no-print { display: none !important; }
+            .pass-item { box-shadow: none !important; border: 2px solid #333; break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><i class="fas fa-train"></i> Railway Pass</div>
+        <div class="nav-menu">
+            <a href="{{ url_for('pass_generator') }}"><i class="fas fa-plus"></i> New Pass</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="page-content passes-container">
+        <h2 class="page-title"><i class="fas fa-ticket-alt"></i> My Railway Passes</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if passes %}
+        <div class="passes-grid">
+            {% for pass_item in passes %}
+            <div class="pass-item pass-{{ pass_item.pass_type }}">
+                <div class="pass-badge">
+                    <i class="fas fa-{% if pass_item.pass_type == 'daily' %}sun{% elif pass_item.pass_type == 'weekly' %}calendar-week{% else %}calendar-check{% endif %}"></i>
+                    {{ pass_item.pass_type|upper }}
+                </div>
+                <div class="pass-id">ID: {{ pass_item.pass_id }}</div>
+                
+                <div class="pass-route-display">
+                    <div class="city-point">
+                        <i class="fas fa-plane-departure"></i>
+                        <span>{{ pass_item.from_city }}</span>
+                    </div>
+                    <div class="route-arrow">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="city-point">
+                        <i class="fas fa-plane-arrival"></i>
+                        <span>{{ pass_item.to_city }}</span>
+                    </div>
+                </div>
+                
+                <div class="pass-info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-train"></i>
+                        <span>{{ pass_item.train_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-calendar-plus"></i>
+                        <span>{{ pass_item.created_at.strftime('%d-%m-%Y') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-calendar-check"></i>
+                        <span>{{ pass_item.valid_until.strftime('%d-%m-%Y') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-rupee-sign"></i>
+                        <span>{{ pass_item.price }}</span>
+                    </div>
+                </div>
+                
+                <div class="pass-qr">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data={{ pass_item.pass_id }}" alt="QR Code">
+                    <small>Scan to verify</small>
+                </div>
+                
+                <button class="print-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print Pass
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-passes-box">
+            <i class="fas fa-ticket-alt"></i>
+            <h3>No Passes Yet</h3>
+            <p>You haven't generated any passes yet.</p>
+            <a href="{{ url_for('pass_generator') }}" class="btn-login">
+                <i class="fas fa-plus"></i> Generate Pass
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

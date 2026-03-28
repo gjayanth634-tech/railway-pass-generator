@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Pass - Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="train-track"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-train"></i> Railway Pass
+        </div>
+        <div class="nav-links">
+            <span class="user-greeting">Welcome, {{ session['user_name'] }}</span>
+            <a href="{{ url_for('view_pass') }}" class="nav-link">
+                <i class="fas fa-ticket-alt"></i> My Passes
+            </a>
+            <a href="{{ url_for('logout') }}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="form-container pass-generator">
+            <div class="form-header">
+                <div class="logo">
+                    <i class="fas fa-passport"></i>
+                </div>
+                <h1>Generate Your Pass</h1>
+                <p>Choose your journey details</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('pass_generator') }}" id="passForm">
+                <div class="pass-type-section">
+                    <h3><i class="fas fa-tags"></i> Select Pass Type</h3>
+                    <div class="pass-type-grid">
+                        <label class="pass-type-card">
+                            <input type="radio" name="pass_type" value="daily" required>
+                            <div class="pass-type-content">
+                                <i class="fas fa-sun"></i>
+                                <h4>Daily Pass</h4>
+                                <p class="price">₹{{ prices.daily }}</p>
+                                <span class="validity">Valid for 24 hours</span>
+                            </div>
+                        </label>
+                        <label class="pass-type-card">
+                            <input type="radio" name="pass_type" value="weekly" required>
+                            <div class="pass-type-content">
+                                <i class="fas fa-calendar-week"></i>
+                                <h4>Weekly Pass</h4>
+                                <p class="price">₹{{ prices.weekly }}</p>
+                                <span class="validity">Valid for 7 days</span>
+                            </div>
+                        </label>
+                        <label class="pass-type-card">
+                            <input type="radio" name="pass_type" value="monthly" required>
+                            <div class="pass-type-content">
+                                <i class="fas fa-calendar-alt"></i>
+                                <h4>Monthly Pass</h4>
+                                <p class="price">₹{{ prices.monthly }}</p>
+                                <span class="validity">Valid for 30 days</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="from_city">
+                            <i class="fas fa-plane-departure"></i> From City
+                        </label>
+                        <select id="from_city" name="from_city" required>
+                            <option value="">Select Source City</option>
+                            {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="to_city">
+                            <i class="fas fa-plane-arrival"></i> To City
+                        </label>
+                        <select id="to_city" name="to_city" required>
+                            <option value="">Select Destination City</option>
+                            {% for city in cities %}
+                            <option value="{{ city }}">{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="train_number">
+                        <i class="fas fa-train"></i> Select Train
+                    </label>
+                    <select id="train_number" name="train_number" required>
+                        <option value="">Select Train</option>
+                        {% for train in trains %}
+                        <option value="{{ train.number }}">{{ train.name }} ({{ train.number }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary btn-proceed">
+                    <i class="fas fa-credit-card"></i> Proceed to Payment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

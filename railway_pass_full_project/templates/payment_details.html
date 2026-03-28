@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Payment Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="payment-page">
+
+<div class="payment-container">
+
+    <h2>Enter {{ method }} Details</h2>
+
+    <form method="POST">
+
+        {% if method == 'UPI' %}
+            <input type="text" name="upi_id" placeholder="Enter UPI ID (e.g. user@upi)" required>
+        
+        {% elif method == 'Credit Card' or method == 'Debit Card' %}
+            <input type="text" name="card_number" placeholder="Card Number" maxlength="16" required>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" required>
+                <input type="password" name="cvv" placeholder="CVV" maxlength="3" required>
+            </div>
+            <input type="text" name="card_holder" placeholder="Card Holder Name" required>
+
+        {% elif method == 'Wallet' %}
+            <p style="margin-bottom: 15px;">Balance: ₹500.00</p>
+            <p style="margin-bottom: 15px; font-size: 14px; color: #ccc;">Amount will be deducted from your wallet.</p>
+        
+        {% else %}
+            <p>Please proceed to pay.</p>
+        {% endif %}
+
+        <button type="submit" class="pay-btn">Pay Now</button>
+
+    </form>
+
+    <div class="bottom-text" style="margin-top: 15px;">
+        <a href="{{ url_for('payment') }}" style="font-size: 14px;">&larr; Back to Payment Options</a>
+    </div>
+
+</div>
+
+</body>
+</html>     

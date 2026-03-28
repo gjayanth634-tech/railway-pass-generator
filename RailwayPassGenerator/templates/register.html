@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Pass - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-page">
+        <div class="login-left">
+            <div class="brand">
+                <i class="fas fa-train"></i>
+                <h1>Railway Pass</h1>
+            </div>
+            <p class="tagline">Create your account to generate passes</p>
+            <div class="features">
+                <div class="feature"><i class="fas fa-user-plus"></i> Easy Registration</div>
+                <div class="feature"><i class="fas fa-ticket-alt"></i> Instant Pass Generation</div>
+                <div class="feature"><i class="fas fa-mobile-alt"></i> Access Anywhere</div>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-box register-box">
+                <h2>Create Account</h2>
+                <p>Fill in your details</p>
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="full_name" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" name="mobile" placeholder="Mobile Number (10 digits)" maxlength="10" pattern="[0-9]{10}" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" name="aadhar" placeholder="Aadhar Card Number (12 digits)" maxlength="12" pattern="[0-9]{12}" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" name="dob" required>
+                        <small>Must be 18+ years old</small>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password (min 6 characters)" minlength="6" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                    </div>
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                </form>
+                
+                <p class="register-link">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

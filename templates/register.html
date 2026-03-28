@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Pass - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="train-track"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="form-container register-form">
+            <div class="form-header">
+                <div class="logo">
+                    <i class="fas fa-train"></i>
+                </div>
+                <h1>Railway Pass</h1>
+                <p>Create Your Account</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                <div class="form-group">
+                    <label for="full_name">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    <input type="text" id="full_name" name="full_name" required 
+                           placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="Enter your email">
+                </div>
+
+                <div class="form-group">
+                    <label for="mobile">
+                        <i class="fas fa-phone"></i> Mobile Number
+                    </label>
+                    <input type="tel" id="mobile" name="mobile" required 
+                           placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label for="aadhar">
+                        <i class="fas fa-id-card"></i> Aadhar Card Number
+                    </label>
+                    <input type="text" id="aadhar" name="aadhar" required 
+                           placeholder="Enter 12-digit Aadhar number" maxlength="12" pattern="[0-9]{12}">
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">
+                        <i class="fas fa-calendar"></i> Date of Birth
+                    </label>
+                    <input type="date" id="dob" name="dob" required>
+                    <small class="age-note">Must be 18 years or older</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Create a password" minlength="6">
+                    <div class="password-strength">
+                        <div class="strength-bar"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" required 
+                           placeholder="Confirm your password">
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

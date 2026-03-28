@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Passes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    
+    <div class="container" style="width: 600px;">
+        
+        <div class="top-bar">
+            <h2>My Railway Passes</h2>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <a href="{{ url_for('home') }}" class="logout">New Pass</a>
+                <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <form method="GET" action="{{ url_for('my_passes') }}" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="search" name="search" placeholder="Search by Pass Number..." value="{{ search_query or '' }}" style="flex-grow: 1; margin-bottom: 0;">
+            <button type="submit" style="width: auto; padding: 14px 20px; margin-top: 0;">Search</button>
+        </form>
+
+        {% if passes %}
+            <ul style="list-style: none; padding: 0;">
+                {% for pass in passes %}
+                    <li style="background: rgba(255,255,255,0.1); padding: 15px; margin-bottom: 10px; border-radius: 10px;">
+                        <strong>Pass Number:</strong> <span style="color: orange;">{{ pass.pass_number }}</span><br>
+                        <strong>Name:</strong> {{ pass.name }} | <strong>Age:</strong> {{ pass.age }}<br>
+                        <strong>Route:</strong> {{ pass.source }} &rarr; {{ pass.destination }}
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Pagination Controls -->
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                
+                {% if page > 1 %}
+                    <a href="{{ url_for('my_passes', page=page-1, search=search_query) }}" style="color: orange; text-decoration: none;">&larr; Previous</a>
+                {% else %}
+                    <span style="color: gray;">&larr; Previous</span>
+                {% endif %}
+
+                <span>Page {{ page }} of {{ total_pages }}</span>
+
+                {% if page < total_pages %}
+                    <a href="{{ url_for('my_passes', page=page+1, search=search_query) }}" style="color: orange; text-decoration: none;">Next &rarr;</a>
+                {% else %}
+                    <span style="color: gray;">Next &rarr;</span>
+                {% endif %}
+
+            </div>
+
+        {% else %}
+            {% if search_query %}
+                <p style="text-align: center;">No passes found matching your search.</p>
+            {% else %}
+                <p style="text-align: center;">You haven't generated any passes yet.</p>
+            {% endif %}
+        {% endif %}
+
+    </div>
+</body>
+</html>

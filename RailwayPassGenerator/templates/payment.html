@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Railway Pass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><i class="fas fa-train"></i> Railway Pass</div>
+        <div class="nav-menu">
+            <a href="{{ url_for('pass_generator') }}"><i class="fas fa-arrow-left"></i> Back</a>
+            <a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="page-content">
+        <div class="form-card payment-card">
+            <div class="card-header">
+                <i class="fas fa-credit-card"></i>
+                <h2>Payment</h2>
+            </div>
+
+            <div class="order-summary">
+                <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                <div class="summary-row">
+                    <span>Pass Type</span>
+                    <span class="capitalize">{{ pass_data.pass_type }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>From</span>
+                    <span>{{ pass_data.from_city }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>To</span>
+                    <span>{{ pass_data.to_city }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Train</span>
+                    <span>{{ pass_data.train_number }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>₹{{ pass_data.price }}</span>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('payment') }}">
+                <h3><i class="fas fa-wallet"></i> Payment Method</h3>
+                <div class="payment-methods">
+                    <label class="payment-method">
+                        <input type="radio" name="payment_method" value="upi" checked>
+                        <div class="payment-inner">
+                            <i class="fas fa-qrcode"></i>
+                            <span>UPI</span>
+                        </div>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment_method" value="card">
+                        <div class="payment-inner">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Card</span>
+                        </div>
+                    </label>
+                    <label class="payment-method">
+                        <input type="radio" name="payment_method" value="wallet">
+                        <div class="payment-inner">
+                            <i class="fas fa-wallet"></i>
+                            <span>Wallet</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="payment-fields">
+                    <div class="payment-field active" id="upi-field">
+                        <div class="qr-display">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=railwaypass@upi" alt="QR">
+                            <small>Scan with any UPI app</small>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="text" name="upi_id" placeholder="Enter UPI ID (e.g., yourname@upi)">
+                        </div>
+                    </div>
+                    <div class="payment-field" id="card-field">
+                        <div class="input-group">
+                            <i class="fas fa-credit-card"></i>
+                            <input type="text" name="card_number" placeholder="Card Number" maxlength="19">
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group">
+                                <i class="fas fa-calendar"></i>
+                                <input type="text" name="expiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                            <div class="input-group">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" name="cvv" placeholder="CVV" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="payment-field" id="wallet-field">
+                        <div class="wallet-brands">
+                            <i class="fab fa-google-pay"></i>
+                            <i class="fab fa-paytm"></i>
+                            <i class="fab fa-amazon-pay"></i>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" name="wallet_number" placeholder="Wallet Number">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login btn-full">
+                    <i class="fas fa-lock"></i> Pay ₹{{ pass_data.price }}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const paymentMethods = document.querySelectorAll('.payment-method input');
+        const paymentFields = document.querySelectorAll('.payment-field');
+
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', () => {
+                paymentFields.forEach(field => field.classList.remove('active'));
+                document.getElementById(method.value + '-field').classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

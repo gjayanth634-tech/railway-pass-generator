@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-wrapper { display: flex; min-height: 100vh; }
+        
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            padding: 25px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-brand { color: #fff; font-size: 1.4rem; font-weight: 600; display: flex; align-items: center; gap: 12px; margin-bottom: 40px; padding: 0 10px; }
+        .sidebar-brand i { color: #e74c3c; }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 8px; }
+        .sidebar-menu a { display: flex; align-items: center; gap: 12px; color: #bdc3c7; text-decoration: none; padding: 14px 15px; border-radius: 10px; transition: all 0.3s ease; font-size: 0.95rem; }
+        .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        
+        .main-content { flex: 1; margin-left: 260px; padding: 30px; background: #f5f6fa; }
+        
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .page-header h1 { color: #2c3e50; font-size: 1.8rem; }
+        
+        .admin-table-wrapper { background: #fff; border-radius: 16px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); overflow: hidden; }
+        .table-header { padding: 20px 25px; border-bottom: 1px solid #ecf0f1; }
+        .table-header h2 { font-size: 1.2rem; color: #2c3e50; }
+        
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 15px 20px; text-align: left; }
+        .data-table th { background: #f8f9fa; color: #7f8c8d; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table tr { border-bottom: 1px solid #ecf0f1; transition: background 0.3s ease; }
+        .data-table tbody tr:hover { background: #f8f9fa; }
+        .data-table td { color: #2c3e50; font-size: 0.95rem; }
+        
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+        
+        .action-btn { padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; }
+        .btn-delete { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+        .btn-delete:hover { background: #e74c3c; color: #fff; }
+        
+        @media (max-width: 1200px) { .data-table { display: block; overflow-x: auto; } }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body>
+    <div class="admin-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><i class="fas fa-train"></i> Railway Pass</div>
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin_all_passes') }}"><i class="fas fa-ticket-alt"></i> All Passes</a></li>
+                <li><a href="{{ url_for('admin_all_users') }}" class="active"><i class="fas fa-users"></i> All Users</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1><i class="fas fa-users"></i> All Users</h1>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn-primary" style="width: auto; padding: 12px 25px;">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+
+            <div class="admin-table-wrapper">
+                <div class="table-header"><h2>Manage All Users</h2></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Aadhar</th>
+                            <th>DOB</th>
+                            <th>Registered</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <div class="user-avatar">{{ user.full_name[0]|upper }}</div>
+                                    <strong>{{ user.full_name }}</strong>
+                                </div>
+                            </td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.mobile }}</td>
+                            <td>{{ user.aadhar }}</td>
+                            <td>{{ user.dob }}</td>
+                            <td>{{ user.created_at.strftime('%d-%m-%Y') }}</td>
+                            <td>
+                                <a href="{{ url_for('delete_user', user_id=user._id) }}" class="action-btn btn-delete" onclick="return confirm('Are you sure? This will delete all passes for this user.')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #7f8c8d; padding: 40px;">No users found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

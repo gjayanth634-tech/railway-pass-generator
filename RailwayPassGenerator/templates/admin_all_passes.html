@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Passes - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-layout { display: flex; min-height: 100vh; }
+        .sidebar { width: 250px; background: #1a1a2e; padding: 20px; position: fixed; height: 100vh; }
+        .sidebar-brand { color: #fff; font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 10px; margin-bottom: 40px; }
+        .sidebar-brand i { color: #e74c3c; }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu li { margin-bottom: 8px; }
+        .sidebar-menu a { display: flex; align-items: center; gap: 12px; color: #aaa; text-decoration: none; padding: 12px 15px; border-radius: 8px; transition: 0.3s; }
+        .sidebar-menu a:hover, .sidebar-menu a.active { background: rgba(231,76,60,0.2); color: #e74c3c; }
+        .main-admin { flex: 1; margin-left: 250px; padding: 30px; background: #f5f6fa; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .admin-header h1 { color: #2c3e50; }
+        .data-table-wrap { background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; }
+        .table-header { padding: 20px; border-bottom: 1px solid #eee; }
+        .table-header h2 { font-size: 1.2rem; color: #2c3e50; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 0.8rem; color: #7f8c8d; text-transform: uppercase; }
+        .data-table td { padding: 15px; border-bottom: 1px solid #eee; color: #2c3e50; }
+        .data-table tr:hover { background: #f8f9fa; }
+        .badge { padding: 5px 10px; border-radius: 15px; font-size: 0.75rem; font-weight: 600; }
+        .badge-daily { background: rgba(243,156,18,0.15); color: #f39c12; }
+        .badge-monthly { background: rgba(52,152,219,0.15); color: #3498db; }
+        .badge-yearly { background: rgba(39,174,96,0.15); color: #27ae60; }
+        .btn-del { background: rgba(231,76,60,0.15); color: #e74c3c; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; }
+        .btn-del:hover { background: #e74c3c; color: #fff; }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-admin { margin-left: 0; } .data-table { display: block; overflow-x: auto; } }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><i class="fas fa-train"></i> Railway Pass</div>
+            <ul class="sidebar-menu">
+                <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="{{ url_for('admin_all_passes') }}" class="active"><i class="fas fa-ticket-alt"></i> All Passes</a></li>
+                <li><a href="{{ url_for('admin_all_users') }}"><i class="fas fa-users"></i> All Users</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-admin">
+            <div class="admin-header">
+                <h1><i class="fas fa-ticket-alt"></i> All Passes</h1>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn-login" style="width: auto; padding: 10px 20px;">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+
+            <div class="data-table-wrap">
+                <div class="table-header"><h2>Manage All Passes</h2></div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Pass ID</th>
+                            <th>Type</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Train</th>
+                            <th>Price</th>
+                            <th>Valid Until</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pass_item in passes %}
+                        <tr>
+                            <td><strong>{{ pass_item.pass_id }}</strong></td>
+                            <td><span class="badge badge-{{ pass_item.pass_type }}">{{ pass_item.pass_type|upper }}</span></td>
+                            <td>{{ pass_item.from_city }}</td>
+                            <td>{{ pass_item.to_city }}</td>
+                            <td>{{ pass_item.train_number }}</td>
+                            <td>₹{{ pass_item.price }}</td>
+                            <td>{{ pass_item.valid_until.strftime('%d-%m-%Y') }}</td>
+                            <td><a href="{{ url_for('delete_pass', pass_id=pass_item.pass_id) }}" class="btn-del" onclick="return confirm('Delete this pass?')"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="8" style="text-align: center; color: #7f8c8d;">No passes found</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
